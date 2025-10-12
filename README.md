@@ -1,4 +1,6 @@
 # OpenSymbolic
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Status: Experimental](https://img.shields.io/badge/status-experimental-orange.svg)]()
 
 *OpenSymbolic* — Experimental symbolic-AI operating system focused on universal communication between humans, machines, and intelligent agents.
 
@@ -13,7 +15,7 @@ Goal: enable seamless interaction between digital and biological intelligences.
 - Extensible Architecture for modular AI experiments
 
 ## Example
-```python
+``python
 from opensymbolic import Agent
 
 agent = Agent("hello")
