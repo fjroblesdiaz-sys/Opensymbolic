@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComunicaSímbolo - Comunicación Multiusuario</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◇</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-top">
+                <div class="logo">
+                    <span class="logo-icon">◇</span>
+                    <h1>ComunicaSímbolo</h1>
+                </div>
+                <div class="header-controls">
+                    <button id="darkModeToggle" class="icon-btn" title="Modo Oscuro">
+                        <span class="icon-moon">🌙</span>
+                        <span class="icon-sun" style="display:none">☀️</span>
+                    </button>
+                    <button id="settingsBtn" class="icon-btn" title="Ajustes">⚙️</button>
+                </div>
+            </div>
+            <p class="tagline">Comunicación aumentativa con conceptrones</p>
+            
+            <!-- Room Panel -->
+            <div class="room-panel" id="roomPanel">
+                <div class="room-tabs">
+                    <button class="tab-btn active" data-tab="create">Crear Sala</button>
+                    <button class="tab-btn" data-tab="join">Unirse</button>
+                </div>
+                
+                <div class="tab-content active" data-content="create">
+                    <input type="text" id="createUsername" placeholder="Tu nombre" maxlength="20">
+                    <button id="createRoomBtn" class="btn btn-primary btn-full">
+                        <span>🎮</span> Crear Nueva Sala
+                    </button>
+                </div>
+                
+                <div class="tab-content" data-content="join">
+                    <input type="text" id="joinUsername" placeholder="Tu nombre" maxlength="20">
+                    <input type="text" id="roomCode" placeholder="Código de sala" maxlength="8">
+                    <button id="joinRoomBtn" class="btn btn-primary btn-full">
+                        <span>🔗</span> Unirse a la Sala
+                    </button>
+                </div>
+                
+                <div class="room-info" id="roomInfo" style="display:none">
+                    <div class="room-code-display">
+                        <span class="label">Código:</span>
+                        <span class="code" id="displayRoomCode">------</span>
+                        <button class="copy-btn" id="copyRoomCode" title="Copiar">📋</button>
+                    </div>
+                    <div class="users-list" id="usersList"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content" id="mainContent" style="display:none">
+            <section class="board-section">
+                <div class="board-header">
+                    <h2>Mi Tablero de Comunicación</h2>
+                    <div class="board-actions">
+                        <button id="clearChain" class="btn btn-secondary btn-sm">
+                            <span>↺</span> Limpiar
+                        </button>
+                        <button id="playChain" class="btn btn-primary btn-sm" disabled>
+                            <span>▶</span> Reproducir
+                        </button>
+                        <button id="stopPlayback" class="btn btn-danger btn-sm" disabled>
+                            <span>■</span> Parar
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="chainDisplay" class="chain-display">
+                    <p class="placeholder-text">Toca los símbolos para crear tu mensaje</p>
+                </div>
+
+                <div id="conceptronGrid" class="conceptron-grid">
+                </div>
+                
+                <div class="chain-users" id="chainUsers"></div>
+            </section>
+
+            <section class="player-section">
+                <div class="player-stats">
+                    <span id="chainLength">0</span> símbolos en cadena
+                    <span class="separator">•</span>
+                    <span id="connectedUsers">1</span> usuario(s) conectado(s)
+                </div>
+            </section>
+
+            <section class="generator-section">
+                <div class="section-header">
+                    <h3>Crea tu Propio Símbolo</h3>
+                    <div class="generator-actions">
+                        <button id="exportConceptrons" class="btn btn-small" title="Exportar">📤</button>
+                        <button id="importConceptrons" class="btn btn-small" title="Importar">📥</button>
+                        <input type="file" id="importFile" accept=".json" style="display:none">
+                    </div>
+                </div>
+                <div class="generator-controls">
+                    <div class="control-group">
+                        <label>Color</label>
+                        <div id="colorPicker" class="color-picker">
+                            <button class="color-btn active" data-color="#FF6B6B" style="background:#FF6B6B" title="Rojo"></button>
+                            <button class="color-btn" data-color="#4ECDC4" style="background:#4ECDC4" title="Verde"></button>
+                            <button class="color-btn" data-color="#45B7D1" style="background:#45B7D1" title="Azul"></button>
+                            <button class="color-btn" data-color="#FFE66D" style="background:#FFE66D" title="Amarillo"></button>
+                            <button class="color-btn" data-color="#95E1D3" style="background:#95E1D3" title="Mint"></button>
+                            <button class="color-btn" data-color="#F38181" style="background:#F38181" title="Coral"></button>
+                            <button class="color-btn" data-color="#AA96DA" style="background:#AA96DA" title="Lila"></button>
+                            <button class="color-btn" data-color="#FCBAD3" style="background:#FCBAD3" title="Rosa"></button>
+                            <button class="color-btn" data-color="#FF9F43" style="background:#FF9F43" title="Naranja"></button>
+                            <button class="color-btn" data-color="#A8E6CF" style="background:#A8E6CF" title="Verde claro"></button>
+                            <button class="color-btn" data-color="#DDA0DD" style="background:#DDA0DD" title="Ciruela"></button>
+                            <button class="color-btn" data-color="#87CEEB" style="background:#87CEEB" title="Cielo"></button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Forma</label>
+                        <div class="shape-picker">
+                            <button class="shape-btn active" data-shape="circle" title="Círculo">
+                                <svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="triangle" title="Triángulo">
+                                <svg viewBox="0 0 40 40"><polygon points="20,5 35,35 5,35" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="square" title="Cuadrado">
+                                <svg viewBox="0 0 40 40"><rect x="8" y="8" width="24" height="24" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="hexagon" title="Hexágono">
+                                <svg viewBox="0 0 40 40"><polygon points="20,2 38,11 38,29 20,38 2,29 2,11" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="star" title="Estrella">
+                                <svg viewBox="0 0 40 40"><polygon points="20,2 24,15 38,15 27,24 31,38 20,29 9,38 13,24 2,15 16,15" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="heart" title="Corazón">
+                                <svg viewBox="0 0 40 40"><path d="M20,35 C5,25 2,15 10,7 C15,2 20,5 20,5 C20,5 25,2 30,7 C38,15 35,25 20,35" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="diamond" title="Diamante">
+                                <svg viewBox="0 0 40 40"><polygon points="20,2 38,20 20,38 2,20" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="pentagon" title="Pentágono">
+                                <svg viewBox="0 0 40 40"><polygon points="20,2 38,15 32,38 8,38 2,15" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="cross" title="Cruz">
+                                <svg viewBox="0 0 40 40"><polygon points="18,2 22,2 22,18 38,18 38,22 22,22 22,38 18,38 18,22 2,22 2,18 18,18" fill="currentColor"/></svg>
+                            </button>
+                            <button class="shape-btn" data-shape="moon" title="Luna">
+                                <svg viewBox="0 0 40 40"><path d="M20,2 A16,16 0 1,1 20,38 A12,12 0 1,0 20,2" fill="currentColor"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Tono (Hz)</label>
+                        <div class="tone-control">
+                            <input type="range" id="toneSlider" min="150" max="1500" value="440">
+                            <span id="toneValue">440 Hz</span>
+                        </div>
+                        <div class="tone-buttons">
+                            <button id="previewTone" class="btn btn-small">🔊 Probar</button>
+                            <button id="playScale" class="btn btn-small" title="Escala musical">🎵</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>Nombre</label>
+                        <input type="text" id="conceptronName" placeholder="¿Qué significa?" maxlength="20">
+                    </div>
+
+                    <button id="addConceptron" class="btn btn-add">
+                        <span class="btn-icon">+</span> Añadir al Tablero
+                    </button>
+                </div>
+            </section>
+
+            <section class="genome-section">
+                <h3>Genome Conceptrón</h3>
+                <p class="section-desc">Convierte palabras en símbolos ADN</p>
+                <div class="genome-input">
+                    <input type="text" id="genomeInput" placeholder="Escribe una palabra..." maxlength="30">
+                    <button id="generateGenome" class="btn btn-primary">Generar</button>
+                </div>
+                <div id="genomeResult" class="genome-result"></div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>OpenSymbolic Ecosystem • Conceptrón Communication v2.0</p>
+        </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
