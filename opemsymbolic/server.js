@@ -205,6 +205,17 @@ io.on('connection', (socket) => {
         });
     });
 
+    // Send message to all users in room
+    socket.on('sendMessage', (messageData) => {
+        if (!currentRoom) return;
+
+        const room = rooms.get(currentRoom);
+        if (room) {
+            io.to(currentRoom).emit('messageReceived', messageData);
+            console.log(`Message sent by ${messageData.sender} in room ${currentRoom}`);
+        }
+    });
+
     // Disconnect
     socket.on('disconnect', () => {
         if (currentRoom) {
